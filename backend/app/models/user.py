@@ -14,6 +14,8 @@ if TYPE_CHECKING:
     from app.models.attachment import Attachment
     from app.models.audit_log import AuditLog
     from app.models.comment import Comment
+    from app.models.password_reset_token import PasswordResetToken
+    from app.models.refresh_token import RefreshToken
     from app.models.ticket import Ticket
 
 
@@ -61,4 +63,10 @@ class User(Base):
     )
     attachments: Mapped[list["Attachment"]] = relationship(
         "Attachment", back_populates="subido_por_user"
+    )
+    refresh_tokens: Mapped[list["RefreshToken"]] = relationship(
+        "RefreshToken", back_populates="user", cascade="all, delete-orphan"
+    )
+    password_reset_tokens: Mapped[list["PasswordResetToken"]] = relationship(
+        "PasswordResetToken", back_populates="user", cascade="all, delete-orphan"
     )
