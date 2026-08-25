@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "defaultMode": "auto",
+    "deny": [
+      "Read(./backend/.env)",
+      "Edit(./backend/.env)",
+      "Bash(git push *)"
+    ],
+    "ask": [
+      "Bash(docker compose down *)"
+    ]
+  }
+}

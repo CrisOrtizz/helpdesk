@@ -14,26 +14,22 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-
   backend:
     build: ./backend
     ports:
       - "8000:8000"
-    environment:
-      DATABASE_URL: postgresql+asyncpg://helpdesk:helpdesk@db:5432/helpdesk_db
-      SECRET_KEY: dev-secret-change-in-production
+    env_file:
+      - ./backend/.env
     depends_on:
       db:
         condition: service_healthy
     volumes:
       - ./backend:/app
-
   adminer:
     image: adminer:4
     ports:
       - "8080:8080"
     depends_on:
       - db
-
 volumes:
   postgres_data:

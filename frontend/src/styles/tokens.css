@@ -1,0 +1,93 @@
+/* Design tokens — Almacén El Constructor */
+:root {
+  --navy: #00122B;
+  --navy-light: #0F2A52;
+  --orange: #EB6600;
+  --cream: #F8F7F5;
+  --green-muted: #4F7A5B;
+  --gray-neutral: #8B8478;
+
+  --glass-bg: rgba(255, 255, 255, 0.60);
+  --glass-border: rgba(255, 255, 255, 0.80);
+  --glass-radius: 20px;
+  --glass-shadow: 0 4px 24px rgba(0, 18, 43, 0.08);
+}
+
+/* Glass utility */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  box-shadow: var(--glass-shadow);
+}
+
+@media (max-width: 768px) {
+  .glass {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+/* Animated background blobs */
+@keyframes float1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(30px, -20px) scale(1.05); }
+  66%       { transform: translate(-20px, 15px) scale(0.97); }
+}
+@keyframes float2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40%       { transform: translate(-25px, 20px) scale(1.03); }
+  70%       { transform: translate(20px, -15px) scale(0.98); }
+}
+
+.ambient-blob {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+.ambient-blob-1 {
+  width: 700px;
+  height: 700px;
+  top: -200px;
+  left: -150px;
+  background: radial-gradient(circle, rgba(15, 42, 82, 0.10) 0%, transparent 70%);
+  animation: float1 28s ease-in-out infinite;
+}
+.ambient-blob-2 {
+  width: 600px;
+  height: 600px;
+  bottom: -150px;
+  right: -100px;
+  background: radial-gradient(circle, rgba(235, 102, 0, 0.09) 0%, transparent 70%);
+  animation: float2 22s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-blob { animation: none; }
+}
+
+/* Ticket status badge colors */
+.badge-abierto     { background: rgba(235, 102, 0, 0.12); color: #EB6600; border: 1px solid rgba(235, 102, 0, 0.25); }
+.badge-en_progreso { background: rgba(0, 18, 43, 0.10);  color: #00122B; border: 1px solid rgba(0, 18, 43, 0.20); }
+.badge-resuelto    { background: rgba(79, 122, 91, 0.12); color: #4F7A5B; border: 1px solid rgba(79, 122, 91, 0.25); }
+.badge-cerrado     { background: rgba(139, 132, 120, 0.12); color: #8B8478; border: 1px solid rgba(139, 132, 120, 0.25); }
+
+/* Priority colors */
+.prio-baja    { color: var(--gray-neutral); }
+.prio-media   { color: #2563eb; }
+.prio-alta    { color: var(--orange); }
+.prio-critica { color: var(--orange); font-weight: 600; }
+
+/* SLA ring pulse */
+@keyframes sla-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+.sla-expired { animation: sla-pulse 1.8s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sla-expired { animation: none; }
+}

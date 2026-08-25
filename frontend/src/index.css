@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+@import "./styles/tokens.css";
+
+@theme {
+  --color-navy: #00122B;
+  --color-navy-light: #0F2A52;
+  --color-orange: #EB6600;
+  --color-cream: #F8F7F5;
+  --color-green-muted: #4F7A5B;
+  --color-gray-neutral: #8B8478;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--navy);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Mono for timestamps, ticket IDs, SLA numbers */
+.mono {
+  font-family: var(--font-mono);
+}

@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 
-from sqlalchemy import DateTime, Enum as SAEnum, ForeignKey, String, Text, func
+from sqlalchemy import Boolean, DateTime, Enum as SAEnum, ForeignKey, String, Text, func, text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -62,6 +62,16 @@ class Ticket(Base):
         DateTime(timezone=True), server_default=func.now()
     )
     resolved_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+
+    # SLA — calculados al crear el ticket según prioridad
+    sla_response_due_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+    sla_resolution_due_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+    # Llenado la primera vez que un agente/admin comenta o el ticket pasa a en_progreso
+    first_response_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+    # Evita reenviar la alerta de SLA vencido en cada corrida del scheduler
+    sla_breach_notified: Mapped[bool] = mapped_column(
+        Boolean, default=False, server_default=text("false")
+    )
 
     # foreign_keys explícito requerido porque hay dos FK hacia users
     solicitante: Mapped["User"] = relationship(

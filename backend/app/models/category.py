@@ -1,7 +1,7 @@
 import uuid
 from typing import TYPE_CHECKING
 
-from sqlalchemy import String
+from sqlalchemy import Enum as SAEnum, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -18,6 +18,9 @@ class Category(Base):
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     nombre: Mapped[str] = mapped_column(String(255), unique=True)
+    prioridad_sugerida: Mapped[str] = mapped_column(
+        String(20), nullable=False, default="media", server_default="media"
+    )
 
     tickets: Mapped[list["Ticket"]] = relationship(
         "Ticket", back_populates="categoria"

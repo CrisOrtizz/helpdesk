@@ -1,8 +1,8 @@
 import uuid
 from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
-from sqlalchemy import DateTime, ForeignKey, String, func
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, func, text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -22,7 +22,16 @@ class Attachment(Base):
     ticket_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("tickets.id")
     )
-    url_archivo: Mapped[str] = mapped_column(String(1000))
+    # R2 object key: "tickets/{ticket_id}/{attachment_id}/{filename}"
+    s3_key: Mapped[Optional[str]] = mapped_column(String(1000))
+    nombre_archivo: Mapped[Optional[str]] = mapped_column(String(500))
+    mime_type: Mapped[Optional[str]] = mapped_column(String(100))
+    # True después de que el frontend confirma la subida exitosa a R2
+    confirmado: Mapped[bool] = mapped_column(
+        Boolean, default=False, server_default=text("false")
+    )
+    # Campo legado — nullable ahora que usamos URLs prefirmadas en lugar de URLs permanentes
+    url_archivo: Mapped[Optional[str]] = mapped_column(String(1000))
     # FK column; la relación ORM se llama subido_por_user para evitar colisión
     subido_por: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("users.id")
