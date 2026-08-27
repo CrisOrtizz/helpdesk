@@ -38,3 +38,11 @@ frontend/.env.local
 # OS
 .DS_Store
 Thumbs.db
+
+# Archivos temporales de prueba
+cookies.txt
+cookies_viejas.txt
+backup.sql
+salida.txt
+"Nuevo Documento de texto.txt"
+*.txt.tmp

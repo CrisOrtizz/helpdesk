@@ -17,6 +17,10 @@ class Settings(BaseSettings):
     RESEND_API_KEY: str = ""
     FRONTEND_URL: str = "http://localhost:5173"
 
+    # Cookies — sobreescribir en producción: COOKIE_SECURE=true, COOKIE_SAMESITE=none
+    COOKIE_SECURE: bool = False
+    COOKIE_SAMESITE: str = "lax"
+
     # Cloudflare R2 (compatible con S3)
     R2_ACCOUNT_ID: str = ""
     R2_ACCESS_KEY_ID: str = ""

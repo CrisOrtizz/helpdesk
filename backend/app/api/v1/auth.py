@@ -1,7 +1,11 @@
 import logging
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Cookie, Depends, HTTPException, Request, Response, status
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+
+limiter = Limiter(key_func=get_remote_address)
 from sqlalchemy import and_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -35,8 +39,8 @@ _COOKIE_NAME = "refresh_token"
 _COOKIE_KWARGS = dict(
     key=_COOKIE_NAME,
     httponly=True,
-    secure=False,   # True en producción (HTTPS)
-    samesite="lax",
+    secure=settings.COOKIE_SECURE,
+    samesite=settings.COOKIE_SAMESITE,
     path="/auth",
     max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 86_400,
 )
@@ -51,7 +55,9 @@ def _clear_refresh_cookie(response: Response) -> None:
 
 
 @router.post("/login", response_model=TokenResponse)
+@limiter.limit("10/minute")
 async def login(
+    request: Request,
     body: LoginRequest,
     response: Response,
     db: AsyncSession = Depends(get_db),
@@ -151,7 +157,9 @@ async def logout_all(
 
 
 @router.post("/forgot-password", response_model=MessageResponse)
+@limiter.limit("5/minute")
 async def forgot_password(
+    request: Request,
     body: ForgotPasswordRequest,
     db: AsyncSession = Depends(get_db),
 ) -> MessageResponse:
